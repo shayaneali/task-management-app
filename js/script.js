@@ -35,6 +35,37 @@ const STORAGE_KEY = 'taskr_tasks';
       if (t) { t.completed = !t.completed; save(); render(); }
     }
 
+    // --- Edit task (inline) ---
+    function editTask(id, itemEl) {
+      const t = tasks.find(t => t.id === id);
+      if (!t || !itemEl) return;
+      const span = itemEl.querySelector('.task-text');
+      if (!span || itemEl.querySelector('.edit-input')) return;
+
+      const input = document.createElement('input');
+      input.className = 'edit-input';
+      input.type = 'text';
+      input.maxLength = 200;
+      input.value = t.text;
+      span.replaceWith(input);
+      input.focus();
+      input.select();
+
+      let done = false;
+      const commit = saveIt => {
+        if (done) return;
+        done = true;
+        const text = input.value.trim();
+        if (saveIt && text) { t.text = text; save(); }
+        render();
+      };
+      input.addEventListener('keydown', e => {
+        if (e.key === 'Enter') commit(true);
+        if (e.key === 'Escape') commit(false);
+      });
+      input.addEventListener('blur', () => commit(true));
+    }
+
     // --- Delete task ---
     function deleteTask(id) {
       tasks = tasks.filter(t => t.id !== id);
@@ -89,6 +120,7 @@ const STORAGE_KEY = 'taskr_tasks';
             </div>
             <span class="task-text">${escHtml(task.text)}</span>
             <span class="task-date">${task.createdAt}</span>
+            <button class="edit-btn" data-id="${task.id}" title="Edit">✎</button>
             <button class="del-btn" data-id="${task.id}" title="Delete">✕</button>
           `;
           list.appendChild(el);
@@ -107,8 +139,10 @@ const STORAGE_KEY = 'taskr_tasks';
     document.getElementById('task-list').addEventListener('click', e => {
       const check = e.target.closest('.check-wrap');
       const del   = e.target.closest('.del-btn');
+      const edit  = e.target.closest('.edit-btn');
       if (check) toggleTask(Number(check.dataset.id));
       if (del)   deleteTask(Number(del.dataset.id));
+      if (edit)  editTask(Number(edit.dataset.id), edit.closest('.task-item'));
     });
 
     // Add button

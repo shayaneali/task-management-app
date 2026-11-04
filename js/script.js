@@ -76,11 +76,44 @@ const STORAGE_KEY = 'taskr_tasks';
       input.addEventListener('blur', () => commit(true));
     }
 
-    // --- Delete task ---
+    // --- Delete task, with a short undo window ---
+    let lastDeleted = null; // { task, index } of the most recently deleted task
+    let undoTimer = null;
+
+    function hideUndoToast() {
+      const toast = document.getElementById('undo-toast');
+      if (toast) toast.style.display = 'none';
+      if (undoTimer) { clearTimeout(undoTimer); undoTimer = null; }
+      lastDeleted = null;
+    }
+
+    function showUndoToast() {
+      const toast = document.getElementById('undo-toast');
+      if (!toast) return;
+      if (undoTimer) clearTimeout(undoTimer);
+      toast.style.display = 'flex';
+      // Undo stays available for 5 seconds, then the deletion is final.
+      undoTimer = setTimeout(hideUndoToast, 5000);
+    }
+
+    function undoDelete() {
+      if (!lastDeleted) return;
+      const { task, index } = lastDeleted;
+      if (index >= 0 && index <= tasks.length) tasks.splice(index, 0, task);
+      else tasks.unshift(task);
+      hideUndoToast();
+      save();
+      render();
+    }
+
     function deleteTask(id) {
+      const index = tasks.findIndex(t => t.id === id);
+      if (index === -1) return;
+      lastDeleted = { task: tasks[index], index };
       tasks = tasks.filter(t => t.id !== id);
       save();
       render();
+      showUndoToast();
     }
 
     // --- Clear completed ---
@@ -199,6 +232,9 @@ const STORAGE_KEY = 'taskr_tasks';
 
     // Clear completed
     document.getElementById('clear-btn').addEventListener('click', clearCompleted);
+
+    // Undo the most recent delete, while the toast is shown
+    document.getElementById('undo-btn').addEventListener('click', undoDelete);
 
     // Boot
     load();

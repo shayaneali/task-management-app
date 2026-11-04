@@ -3,6 +3,24 @@ const STORAGE_KEY = 'taskr_tasks';
     let activeFilter = 'all';
     let sortOrder = 'newest'; // 'newest' | 'oldest' — tasks are stored newest-first
 
+    // --- Dark mode toggle (dark is the default theme, choice persists) ---
+    const THEME_KEY = 'taskr_theme';
+    function applyTheme(theme) {
+      const light = theme === 'light';
+      document.body.classList.toggle('light', light);
+      const btn = document.getElementById('theme-toggle');
+      if (btn) btn.textContent = light ? '🌙 Dark mode' : '☀️ Light mode';
+    }
+    function loadTheme() {
+      try { return localStorage.getItem(THEME_KEY) === 'light' ? 'light' : 'dark'; }
+      catch { return 'dark'; }
+    }
+    document.getElementById('theme-toggle').addEventListener('click', () => {
+      const next = document.body.classList.contains('light') ? 'dark' : 'light';
+      try { localStorage.setItem(THEME_KEY, next); } catch {}
+      applyTheme(next);
+    });
+
     // --- Load from localStorage ---
     function load() {
       try {
@@ -237,6 +255,7 @@ const STORAGE_KEY = 'taskr_tasks';
     document.getElementById('undo-btn').addEventListener('click', undoDelete);
 
     // Boot
+    applyTheme(loadTheme());
     load();
     render();
     document.getElementById('task-input').focus();

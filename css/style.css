@@ -450,3 +450,32 @@
       justify-content: flex-end;
       margin-bottom: 12px;
     }
+
+    /* Priority select + badge */
+    .priority-select {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      color: var(--text);
+      font-family: var(--font-body);
+      font-size: 12px;
+      padding: 14px 10px;
+      outline: none;
+      cursor: pointer;
+      flex-shrink: 0;
+    }
+    .priority-select:focus { border-color: var(--accent); }
+    .priority-badge {
+      font-size: 10px;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      padding: 3px 8px;
+      border-radius: 20px;
+      border: 1px solid var(--border);
+      color: var(--muted);
+      white-space: nowrap;
+      flex-shrink: 0;
+    }
+    .priority-badge.priority-low { color: #7dd87d; border-color: #2e5a2e; }
+    .priority-badge.priority-medium { color: #e8c468; border-color: #6b5a1e; }
+    .priority-badge.priority-high { color: #ff7a7a; border-color: #7a2e2e; }

@@ -379,3 +379,9 @@
     ::-webkit-scrollbar { width: 4px; }
     ::-webkit-scrollbar-track { background: transparent; }
     ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 2px; }
+    /* Sort toggle */
+    .sort-row {
+      display: flex;
+      justify-content: flex-end;
+      margin-bottom: 12px;
+    }

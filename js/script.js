@@ -1,6 +1,7 @@
 const STORAGE_KEY = 'taskr_tasks';
     let tasks = [];
     let activeFilter = 'all';
+    let sortOrder = 'newest'; // 'newest' | 'oldest' — tasks are stored newest-first
 
     // --- Load from localStorage ---
     function load() {
@@ -91,9 +92,13 @@ const STORAGE_KEY = 'taskr_tasks';
 
     // --- Get filtered tasks ---
     function filtered() {
-      if (activeFilter === 'pending')   return tasks.filter(t => !t.completed);
-      if (activeFilter === 'completed') return tasks.filter(t => t.completed);
-      return tasks;
+      let list;
+      if (activeFilter === 'pending')   list = tasks.filter(t => !t.completed);
+      else if (activeFilter === 'completed') list = tasks.filter(t => t.completed);
+      else list = tasks.slice();
+      // Tasks are stored newest-first, so oldest order is just the reverse;
+      // filtering happens first, so sorting works with the active filter.
+      return sortOrder === 'oldest' ? list.reverse() : list;
     }
 
     // --- Update stats ---
@@ -183,6 +188,13 @@ const STORAGE_KEY = 'taskr_tasks';
         activeFilter = btn.dataset.filter;
         render();
       });
+    });
+
+    // Sort toggle: newest <-> oldest
+    document.getElementById('sort-btn').addEventListener('click', e => {
+      sortOrder = sortOrder === 'newest' ? 'oldest' : 'newest';
+      e.target.textContent = sortOrder === 'newest' ? 'Sort: Newest ↓' : 'Sort: Oldest ↑';
+      render();
     });
 
     // Clear completed

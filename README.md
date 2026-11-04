@@ -21,6 +21,7 @@ https://taskkerproj.netlify.app/
 - Live task counter
 - Responsive design
 - Optional due date per task, shown on the task item and saved with it
+- Sort tasks by newest or oldest, working with the existing filters
 
 ## Run Locally
 Open `index.html` in a browser, or serve with any static server (e.g. VS Code Live Server).

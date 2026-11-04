@@ -20,6 +20,7 @@ const STORAGE_KEY = 'taskr_tasks';
       try { localStorage.setItem(THEME_KEY, next); } catch {}
       applyTheme(next);
     });
+    let searchQuery = '';
 
     // --- Load from localStorage ---
     function load() {
@@ -147,8 +148,10 @@ const STORAGE_KEY = 'taskr_tasks';
       if (activeFilter === 'pending')   list = tasks.filter(t => !t.completed);
       else if (activeFilter === 'completed') list = tasks.filter(t => t.completed);
       else list = tasks.slice();
+      // Live text search works together with the status filter above.
+      if (searchQuery) list = list.filter(t => t.text.toLowerCase().includes(searchQuery));
       // Tasks are stored newest-first, so oldest order is just the reverse;
-      // filtering happens first, so sorting works with the active filter.
+      // filtering and searching happen first, so sorting works with both.
       return sortOrder === 'oldest' ? list.reverse() : list;
     }
 
@@ -245,6 +248,12 @@ const STORAGE_KEY = 'taskr_tasks';
     document.getElementById('sort-btn').addEventListener('click', e => {
       sortOrder = sortOrder === 'newest' ? 'oldest' : 'newest';
       e.target.textContent = sortOrder === 'newest' ? 'Sort: Newest ↓' : 'Sort: Oldest ↑';
+      render();
+    });
+
+    // Live search: filters tasks by text, together with the active filter
+    document.getElementById('search-input').addEventListener('input', e => {
+      searchQuery = e.target.value.trim().toLowerCase();
       render();
     });
 

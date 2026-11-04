@@ -48,10 +48,41 @@
       max-width: 640px;
     }
 
+    /* Light theme (dark is the default) */
+    body.light {
+      --bg: #f4f4f0;
+      --surface: #ffffff;
+      --surface2: #eeeeea;
+      --border: #dddddd;
+      --accent: #5a7d00;
+      --accent-dim: #476300;
+      --text: #111111;
+      --muted: #777777;
+      --done-color: #e8e8e4;
+      --done-text: #999999;
+    }
+
     /* Header */
     header {
       margin-bottom: 40px;
     }
+
+    .theme-toggle {
+      font-family: var(--font-body);
+      font-size: 11px;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      padding: 6px 14px;
+      border-radius: var(--radius);
+      border: 1px solid var(--border);
+      background: transparent;
+      color: var(--muted);
+      cursor: pointer;
+      margin-top: 16px;
+      transition: all 0.15s;
+    }
+
+    .theme-toggle:hover { color: var(--text); border-color: #444; }
 
     .brand {
       font-family: var(--font-display);

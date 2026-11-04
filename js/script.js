@@ -35,13 +35,14 @@ const STORAGE_KEY = 'taskr_tasks';
       localStorage.setItem(STORAGE_KEY, JSON.stringify(tasks));
     }
 
-    // --- Add task (dueDate is an optional 'YYYY-MM-DD' string) ---
-    function addTask(text, dueDate) {
+    // --- Add task (dueDate is an optional 'YYYY-MM-DD' string; priority defaults to Medium) ---
+    function addTask(text, dueDate, priority) {
       const trimmed = text.trim();
       if (!trimmed) return;
       tasks.unshift({
         id: Date.now(),
         text: trimmed,
+        priority: priority || 'Medium',
         completed: false,
         createdAt: new Date().toLocaleDateString('en-GB', { day: '2-digit', month: 'short' }),
         dueDate: dueDate || null
@@ -188,6 +189,7 @@ const STORAGE_KEY = 'taskr_tasks';
             </div>
             <span class="task-text">${escHtml(task.text)}</span>
             ${task.dueDate ? `<span class="task-due">${escHtml(formatDueDate(task.dueDate))}</span>` : ''}
+            <span class="priority-badge priority-${(task.priority || 'Medium').toLowerCase()}">${escHtml(task.priority || 'Medium')}</span>
             <span class="task-date">${task.createdAt}</span>
             <button class="edit-btn" data-id="${task.id}" title="Edit">✎</button>
             <button class="del-btn" data-id="${task.id}" title="Delete">✕</button>
@@ -218,7 +220,7 @@ const STORAGE_KEY = 'taskr_tasks';
     document.getElementById('add-btn').addEventListener('click', () => {
       const inp = document.getElementById('task-input');
       const due = document.getElementById('task-due');
-      addTask(inp.value, due.value);
+      addTask(inp.value, due.value, document.getElementById('priority-select').value);
       inp.value = '';
       due.value = '';
       inp.focus();
@@ -228,7 +230,7 @@ const STORAGE_KEY = 'taskr_tasks';
     document.getElementById('task-input').addEventListener('keydown', e => {
       if (e.key === 'Enter') {
         const due = document.getElementById('task-due');
-        addTask(e.target.value, due.value);
+        addTask(e.target.value, due.value, document.getElementById('priority-select').value);
         e.target.value = '';
         due.value = '';
       }

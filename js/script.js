@@ -15,18 +15,27 @@ const STORAGE_KEY = 'taskr_tasks';
       localStorage.setItem(STORAGE_KEY, JSON.stringify(tasks));
     }
 
-    // --- Add task ---
-    function addTask(text) {
+    // --- Add task (dueDate is an optional 'YYYY-MM-DD' string) ---
+    function addTask(text, dueDate) {
       const trimmed = text.trim();
       if (!trimmed) return;
       tasks.unshift({
         id: Date.now(),
         text: trimmed,
         completed: false,
-        createdAt: new Date().toLocaleDateString('en-GB', { day: '2-digit', month: 'short' })
+        createdAt: new Date().toLocaleDateString('en-GB', { day: '2-digit', month: 'short' }),
+        dueDate: dueDate || null
       });
       save();
       render();
+    }
+
+    // --- Format a stored due date for display, e.g. 'Due 28 Oct' ---
+    function formatDueDate(dueDate) {
+      if (!dueDate) return '';
+      const d = new Date(dueDate + 'T00:00:00');
+      if (isNaN(d)) return '';
+      return 'Due ' + d.toLocaleDateString('en-GB', { day: '2-digit', month: 'short' });
     }
 
     // --- Toggle complete ---
@@ -119,6 +128,7 @@ const STORAGE_KEY = 'taskr_tasks';
               <span class="check-icon">✓</span>
             </div>
             <span class="task-text">${escHtml(task.text)}</span>
+            ${task.dueDate ? `<span class="task-due">${escHtml(formatDueDate(task.dueDate))}</span>` : ''}
             <span class="task-date">${task.createdAt}</span>
             <button class="edit-btn" data-id="${task.id}" title="Edit">✎</button>
             <button class="del-btn" data-id="${task.id}" title="Delete">✕</button>
@@ -148,16 +158,20 @@ const STORAGE_KEY = 'taskr_tasks';
     // Add button
     document.getElementById('add-btn').addEventListener('click', () => {
       const inp = document.getElementById('task-input');
-      addTask(inp.value);
+      const due = document.getElementById('task-due');
+      addTask(inp.value, due.value);
       inp.value = '';
+      due.value = '';
       inp.focus();
     });
 
     // Enter key
     document.getElementById('task-input').addEventListener('keydown', e => {
       if (e.key === 'Enter') {
-        addTask(e.target.value);
+        const due = document.getElementById('task-due');
+        addTask(e.target.value, due.value);
         e.target.value = '';
+        due.value = '';
       }
     });
 

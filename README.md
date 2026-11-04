@@ -16,7 +16,7 @@ https://taskkerproj.netlify.app/
 - Google Fonts
 
 ## Features
-- Add, edit (inline), complete and delete tasks
+- Add, edit (inline), complete and delete tasks, each with a Low / Medium / High priority label shown as a badge
 - Filter and organize tasks in real time
 - Live task counter
 - Responsive design

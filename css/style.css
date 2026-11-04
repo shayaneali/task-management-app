@@ -138,6 +138,31 @@
       white-space: nowrap;
     }
 
+    .task-due-input {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      color: var(--text);
+      font-family: var(--font-body);
+      font-size: 13px;
+      padding: 14px 12px;
+      outline: none;
+      color-scheme: dark;
+    }
+
+    .task-due-input:focus {
+      border-color: var(--accent);
+      box-shadow: 0 0 0 2px rgba(200,245,66,0.08);
+    }
+
+    .task-due {
+      font-size: 10px;
+      color: var(--accent);
+      letter-spacing: 1px;
+      white-space: nowrap;
+      flex-shrink: 0;
+    }
+
     .add-btn:hover { background: var(--accent-dim); }
     .add-btn:active { transform: scale(0.97); }
 

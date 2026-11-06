@@ -19,6 +19,7 @@ https://taskkerproj.netlify.app/
 - Add, edit (inline), complete and delete tasks, each with a Low / Medium / High priority label shown as a badge
 - Filter and organize tasks in real time
 - Live task counter
+- Completion progress bar above the stats: shows the percentage of tasks completed, updating on every render
 - Responsive design
 - Optional due date per task, shown on the task item and saved with it
 - Sort tasks by newest or oldest, working with the existing filters

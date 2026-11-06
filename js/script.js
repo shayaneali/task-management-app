@@ -166,6 +166,14 @@ const STORAGE_KEY = 'taskr_tasks';
       document.getElementById('stat-done').textContent    = done;
       document.getElementById('remaining-count').textContent =
         pending === 0 ? 'All caught up ✓' : `${pending} task${pending !== 1 ? 's' : ''} remaining`;
+      // Completion progress bar: percentage of tasks done, updated on every render.
+      const pct = total === 0 ? 0 : Math.round((done / total) * 100);
+      const bar = document.getElementById('progress-bar');
+      if (bar) bar.style.width = pct + '%';
+      const wrap = document.getElementById('progress-wrap');
+      if (wrap) wrap.setAttribute('aria-valuenow', String(pct));
+      const label = document.getElementById('progress-label');
+      if (label) label.textContent = pct + '% complete';
     }
 
     // --- Render ---

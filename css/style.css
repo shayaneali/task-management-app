@@ -100,6 +100,32 @@
       margin-top: 4px;
     }
 
+    /* Completion progress bar */
+    .progress-wrap {
+      height: 6px;
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      border-radius: 3px;
+      overflow: hidden;
+      margin-bottom: 8px;
+    }
+
+    .progress-bar {
+      height: 100%;
+      width: 0%;
+      background: var(--accent);
+      border-radius: 3px;
+      transition: width 0.3s ease;
+    }
+
+    .progress-label {
+      font-size: 10px;
+      color: var(--muted);
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      margin-bottom: 20px;
+    }
+
     /* Stats bar */
     .stats-bar {
       display: flex;

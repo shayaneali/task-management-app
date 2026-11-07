@@ -253,6 +253,30 @@
       font-weight: 500;
     }
 
+    /* Priority filter buttons (same look as the status filter buttons) */
+    .priority-btn {
+      font-family: var(--font-body);
+      font-size: 11px;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      padding: 6px 14px;
+      border-radius: var(--radius);
+      border: 1px solid var(--border);
+      background: transparent;
+      color: var(--muted);
+      cursor: pointer;
+      transition: all 0.15s;
+    }
+
+    .priority-btn:hover { color: var(--text); border-color: #444; }
+
+    .priority-btn.active {
+      background: var(--accent);
+      color: #0e0e0e;
+      border-color: var(--accent);
+      font-weight: 500;
+    }
+
     /* Search */
     .search-row { margin-bottom: 20px; }
     .search-input { width: 100%; }
@@ -505,3 +529,4 @@
     .priority-badge.priority-low { color: #7dd87d; border-color: #2e5a2e; }
     .priority-badge.priority-medium { color: #e8c468; border-color: #6b5a1e; }
     .priority-badge.priority-high { color: #ff7a7a; border-color: #7a2e2e; }
+

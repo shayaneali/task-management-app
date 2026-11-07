@@ -143,6 +143,29 @@ const STORAGE_KEY = 'taskr_tasks';
       render();
     }
 
+    // --- Export tasks: downloads the current task list as a plain-text file ---
+    function exportTasks() {
+      const lines = ['TASKR — My Tasks', ''];
+      if (tasks.length === 0) {
+        lines.push('No tasks yet.');
+      } else {
+        tasks.forEach((t, i) => {
+          const status = t.completed ? '[x]' : '[ ]';
+          const due = t.dueDate ? ' — ' + formatDueDate(t.dueDate) : '';
+          lines.push((i + 1) + '. ' + status + ' ' + t.text + ' (' + (t.priority || 'Medium') + ')' + due);
+        });
+      }
+      const blob = new Blob([lines.join('\n') + '\n'], { type: 'text/plain' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = 'taskr-tasks.txt';
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+      URL.revokeObjectURL(url);
+    }
+
     // --- Get filtered tasks ---
     function filtered() {
       let list;
@@ -269,6 +292,9 @@ const STORAGE_KEY = 'taskr_tasks';
 
     // Clear completed
     document.getElementById('clear-btn').addEventListener('click', clearCompleted);
+
+    // Export tasks as a plain-text download
+    document.getElementById('export-btn').addEventListener('click', exportTasks);
 
     // Undo the most recent delete, while the toast is shown
     document.getElementById('undo-btn').addEventListener('click', undoDelete);

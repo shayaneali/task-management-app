@@ -1,6 +1,7 @@
 const STORAGE_KEY = 'taskr_tasks';
     let tasks = [];
     let activeFilter = 'all';
+    let activePriority = 'all'; // 'all' | 'Low' | 'Medium' | 'High'
     let sortOrder = 'newest'; // 'newest' | 'oldest' — tasks are stored newest-first
 
     // --- Dark mode toggle (dark is the default theme, choice persists) ---
@@ -172,7 +173,9 @@ const STORAGE_KEY = 'taskr_tasks';
       if (activeFilter === 'pending')   list = tasks.filter(t => !t.completed);
       else if (activeFilter === 'completed') list = tasks.filter(t => t.completed);
       else list = tasks.slice();
-      // Live text search works together with the status filter above.
+      // Priority filter works together with the status filter above.
+      if (activePriority !== 'all') list = list.filter(t => (t.priority || 'Medium') === activePriority);
+      // Live text search works together with the status and priority filters above.
       if (searchQuery) list = list.filter(t => t.text.toLowerCase().includes(searchQuery));
       // Tasks are stored newest-first, so oldest order is just the reverse;
       // filtering and searching happen first, so sorting works with both.
@@ -273,6 +276,17 @@ const STORAGE_KEY = 'taskr_tasks';
         document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
         btn.classList.add('active');
         activeFilter = btn.dataset.filter;
+        render();
+      });
+    });
+
+    // Priority filter: All / Low / Medium / High, works with the status
+    // filter, live search and sort above.
+    document.querySelectorAll('.priority-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        document.querySelectorAll('.priority-btn').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        activePriority = btn.dataset.priority;
         render();
       });
     });

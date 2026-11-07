@@ -26,6 +26,7 @@ https://taskkerproj.netlify.app/
 - Undo after delete: a small toast with an Undo button restores the deleted task for a few seconds
 - Dark mode toggle (dark by default; switch to a light theme, choice saved in localStorage)
 - Search tasks: a live text search that works together with the All/Pending/Completed filters
+- Export tasks: an Export Tasks button downloads the current task list as a plain-text file
 
 ## Run Locally
 Open `index.html` in a browser, or serve with any static server (e.g. VS Code Live Server).

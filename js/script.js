@@ -60,6 +60,16 @@ const STORAGE_KEY = 'taskr_tasks';
       return 'Due ' + d.toLocaleDateString('en-GB', { day: '2-digit', month: 'short' });
     }
 
+    // --- Overdue: a due date before today on a task that is not completed ---
+    function isOverdue(task) {
+      if (!task || task.completed || !task.dueDate) return false;
+      const due = new Date(task.dueDate + 'T00:00:00');
+      if (isNaN(due)) return false;
+      const today = new Date();
+      today.setHours(0, 0, 0, 0);
+      return due < today;
+    }
+
     // --- Toggle complete ---
     function toggleTask(id) {
       const t = tasks.find(t => t.id === id);
@@ -225,13 +235,14 @@ const STORAGE_KEY = 'taskr_tasks';
         empty.style.display = 'none';
         items.forEach(task => {
           const el = document.createElement('div');
-          el.className = 'task-item' + (task.completed ? ' completed' : '');
+          el.className = 'task-item' + (task.completed ? ' completed' : '') + (isOverdue(task) ? ' overdue' : '');
           el.innerHTML = `
             <div class="check-wrap" data-id="${task.id}" title="Toggle complete">
               <span class="check-icon">✓</span>
             </div>
             <span class="task-text">${escHtml(task.text)}</span>
             ${task.dueDate ? `<span class="task-due">${escHtml(formatDueDate(task.dueDate))}</span>` : ''}
+            ${isOverdue(task) ? '<span class="overdue-tag">Overdue</span>' : ''}
             <span class="priority-badge priority-${(task.priority || 'Medium').toLowerCase()}">${escHtml(task.priority || 'Medium')}</span>
             <span class="task-date">${task.createdAt}</span>
             <button class="edit-btn" data-id="${task.id}" title="Edit">✎</button>

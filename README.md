@@ -23,6 +23,7 @@ https://taskkerproj.netlify.app/
 - Completion progress bar above the stats: shows the percentage of tasks completed, updating on every render
 - Responsive design
 - Optional due date per task, shown on the task item and saved with it
+- Overdue tasks: a task whose due date has passed (and is not completed) is highlighted in red with an "Overdue" tag
 - Sort tasks by newest or oldest, working with the existing filters
 - Undo after delete: a small toast with an Undo button restores the deleted task for a few seconds
 - Dark mode toggle (dark by default; switch to a light theme, choice saved in localStorage)

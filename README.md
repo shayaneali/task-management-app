@@ -28,6 +28,7 @@ https://taskkerproj.netlify.app/
 - Dark mode toggle (dark by default; switch to a light theme, choice saved in localStorage)
 - Search tasks: a live text search that works together with the All/Pending/Completed filters
 - Export tasks: an Export Tasks button downloads the current task list as a plain-text file
+- Mark All Complete button in the bottom bar: marks every pending task complete (Clear Completed still works as before)
 
 ## Run Locally
 Open `index.html` in a browser, or serve with any static server (e.g. VS Code Live Server).

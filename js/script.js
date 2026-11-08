@@ -137,6 +137,15 @@ const STORAGE_KEY = 'taskr_tasks';
       showUndoToast();
     }
 
+    // --- Mark all complete: marks every pending task complete.
+    // Clear Completed keeps working as before (it removes completed tasks).
+    function markAllComplete() {
+      if (!tasks.some(t => !t.completed)) return;
+      tasks.forEach(t => { t.completed = true; });
+      save();
+      render();
+    }
+
     // --- Clear completed ---
     function clearCompleted() {
       tasks = tasks.filter(t => !t.completed);
@@ -303,6 +312,9 @@ const STORAGE_KEY = 'taskr_tasks';
       searchQuery = e.target.value.trim().toLowerCase();
       render();
     });
+
+    // Mark all complete: marks every pending task complete
+    document.getElementById('mark-all-btn').addEventListener('click', markAllComplete);
 
     // Clear completed
     document.getElementById('clear-btn').addEventListener('click', clearCompleted);

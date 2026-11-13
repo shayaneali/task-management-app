@@ -2,7 +2,7 @@ const STORAGE_KEY = 'taskr_tasks';
     let tasks = [];
     let activeFilter = 'all';
     let activePriority = 'all'; // 'all' | 'Low' | 'Medium' | 'High'
-    let sortOrder = 'newest'; // 'newest' | 'oldest' — tasks are stored newest-first
+    let sortOrder = 'newest'; // 'newest' | 'oldest' | 'due' — tasks are stored newest-first
 
     // --- Dark mode toggle (dark is the default theme, choice persists) ---
     const THEME_KEY = 'taskr_theme';
@@ -198,6 +198,19 @@ const STORAGE_KEY = 'taskr_tasks';
       if (searchQuery) list = list.filter(t => t.text.toLowerCase().includes(searchQuery));
       // Tasks are stored newest-first, so oldest order is just the reverse;
       // filtering and searching happen first, so sorting works with both.
+      // Due-date order: earliest due date first; tasks with no due date
+      // (or an invalid one) go last, keeping their relative order.
+      if (sortOrder === 'due') {
+        return list.slice().sort((a, b) => {
+          const da = a.dueDate ? new Date(a.dueDate + 'T00:00:00') : NaN;
+          const db = b.dueDate ? new Date(b.dueDate + 'T00:00:00') : NaN;
+          const aHas = !isNaN(da), bHas = !isNaN(db);
+          if (aHas && bHas) return da - db;
+          if (aHas) return -1;
+          if (bHas) return 1;
+          return 0;
+        });
+      }
       return sortOrder === 'oldest' ? list.reverse() : list;
     }
 
@@ -311,10 +324,10 @@ const STORAGE_KEY = 'taskr_tasks';
       });
     });
 
-    // Sort toggle: newest <-> oldest
-    document.getElementById('sort-btn').addEventListener('click', e => {
-      sortOrder = sortOrder === 'newest' ? 'oldest' : 'newest';
-      e.target.textContent = sortOrder === 'newest' ? 'Sort: Newest ↓' : 'Sort: Oldest ↑';
+    // Sort select: newest / oldest / due date, working with the filters
+    // and live search above.
+    document.getElementById('sort-select').addEventListener('change', e => {
+      sortOrder = e.target.value;
       render();
     });
 

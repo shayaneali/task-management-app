@@ -514,11 +514,29 @@
     ::-webkit-scrollbar { width: 4px; }
     ::-webkit-scrollbar-track { background: transparent; }
     ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 2px; }
-    /* Sort toggle */
+    /* Sort select */
     .sort-row {
       display: flex;
+      align-items: center;
       justify-content: flex-end;
+      gap: 8px;
       margin-bottom: 12px;
+      font-size: 11px;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: var(--muted);
+    }
+    .sort-row select {
+      font-family: var(--font-body);
+      font-size: 11px;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      padding: 6px 10px;
+      border-radius: var(--radius);
+      border: 1px solid var(--border);
+      background: var(--surface);
+      color: var(--text);
+      cursor: pointer;
     }
 
     /* Priority select + badge */

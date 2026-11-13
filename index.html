@@ -80,7 +80,12 @@
 
     <!-- Sort -->
     <div class="sort-row">
-      <button class="filter-btn" id="sort-btn" type="button" aria-label="Toggle task sort order">Sort: Newest ↓</button>
+      <label for="sort-select">Sort by:</label>
+      <select id="sort-select" aria-label="Sort tasks">
+        <option value="newest" selected>Newest first</option>
+        <option value="oldest">Oldest first</option>
+        <option value="due">Due date (earliest first)</option>
+      </select>
     </div>
 
     <!-- Search -->

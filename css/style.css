@@ -419,6 +419,22 @@
 
     .edit-btn:hover { color: var(--text); }
 
+    /* Duplicate btn */
+    .dup-btn {
+      flex-shrink: 0;
+      background: transparent;
+      border: none;
+      color: var(--muted);
+      font-size: 14px;
+      cursor: pointer;
+      line-height: 1;
+      padding: 2px 6px;
+      border-radius: 2px;
+      transition: color 0.15s;
+    }
+
+    .dup-btn:hover { color: var(--text); }
+
     .edit-input {
       flex: 1;
       font: inherit;
@@ -567,4 +583,3 @@
     .priority-badge.priority-low { color: #7dd87d; border-color: #2e5a2e; }
     .priority-badge.priority-medium { color: #e8c468; border-color: #6b5a1e; }
     .priority-badge.priority-high { color: #ff7a7a; border-color: #7a2e2e; }
-

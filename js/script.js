@@ -147,6 +147,27 @@ const STORAGE_KEY = 'taskr_tasks';
       showUndoToast();
     }
 
+    // --- Duplicate task: copies text, due date and priority (not completed),
+    // inserted right after the original and saved like a normal task ---
+    function duplicateTask(id) {
+      const index = tasks.findIndex(t => t.id === id);
+      if (index === -1) return;
+      const src = tasks[index];
+      let newId = Date.now();
+      while (tasks.some(t => t.id === newId)) newId++;
+      const copy = {
+        id: newId,
+        text: src.text,
+        priority: src.priority || 'Medium',
+        completed: false,
+        createdAt: new Date().toLocaleDateString('en-GB', { day: '2-digit', month: 'short' }),
+        dueDate: src.dueDate || null
+      };
+      tasks.splice(index + 1, 0, copy);
+      save();
+      render();
+    }
+
     // --- Mark all complete: marks every pending task complete.
     // Clear Completed keeps working as before (it removes completed tasks).
     function markAllComplete() {
@@ -259,6 +280,7 @@ const STORAGE_KEY = 'taskr_tasks';
             <span class="priority-badge priority-${(task.priority || 'Medium').toLowerCase()}">${escHtml(task.priority || 'Medium')}</span>
             <span class="task-date">${task.createdAt}</span>
             <button class="edit-btn" data-id="${task.id}" title="Edit">✎</button>
+            <button class="dup-btn" data-id="${task.id}" title="Duplicate">⧉</button>
             <button class="del-btn" data-id="${task.id}" title="Delete">✕</button>
           `;
           list.appendChild(el);
@@ -278,9 +300,11 @@ const STORAGE_KEY = 'taskr_tasks';
       const check = e.target.closest('.check-wrap');
       const del   = e.target.closest('.del-btn');
       const edit  = e.target.closest('.edit-btn');
+      const dup   = e.target.closest('.dup-btn');
       if (check) toggleTask(Number(check.dataset.id));
       if (del)   deleteTask(Number(del.dataset.id));
       if (edit)  editTask(Number(edit.dataset.id), edit.closest('.task-item'));
+      if (dup)   duplicateTask(Number(dup.dataset.id));
     });
 
     // Add button

@@ -17,6 +17,7 @@ https://taskkerproj.netlify.app/
 
 ## Features
 - Add, edit (inline), complete and delete tasks, each with a Low / Medium / High priority label shown as a badge
+- Duplicate task: a small copy button on each task duplicates it (same text, due date and priority, not completed), saved and rendered like a normal task
 - Filter and organize tasks in real time
 - Filter by priority: All / Low / Medium / High buttons that work together with the status filters, search and sort
 - Live task counter
@@ -33,4 +34,3 @@ https://taskkerproj.netlify.app/
 
 ## Run Locally
 Open `index.html` in a browser, or serve with any static server (e.g. VS Code Live Server).
-

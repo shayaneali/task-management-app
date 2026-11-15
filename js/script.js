@@ -2,7 +2,7 @@ const STORAGE_KEY = 'taskr_tasks';
     let tasks = [];
     let activeFilter = 'all';
     let activePriority = 'all'; // 'all' | 'Low' | 'Medium' | 'High'
-    let sortOrder = 'newest'; // 'newest' | 'oldest' | 'due' — tasks are stored newest-first
+    let sortOrder = 'newest'; // 'newest' | 'oldest' | 'due' | 'priority' — tasks are stored newest-first
 
     // --- Dark mode toggle (dark is the default theme, choice persists) ---
     const THEME_KEY = 'taskr_theme';
@@ -221,6 +221,13 @@ const STORAGE_KEY = 'taskr_tasks';
       // filtering and searching happen first, so sorting works with both.
       // Due-date order: earliest due date first; tasks with no due date
       // (or an invalid one) go last, keeping their relative order.
+      // Priority order: High first, then Medium, then Low; tasks with
+      // the same priority keep their relative order (sort is stable).
+      if (sortOrder === 'priority') {
+        const rank = { High: 0, Medium: 1, Low: 2 };
+        return list.slice().sort((a, b) =>
+          (rank[a.priority] ?? 1) - (rank[b.priority] ?? 1));
+      }
       if (sortOrder === 'due') {
         return list.slice().sort((a, b) => {
           const da = a.dueDate ? new Date(a.dueDate + 'T00:00:00') : NaN;
@@ -348,7 +355,7 @@ const STORAGE_KEY = 'taskr_tasks';
       });
     });
 
-    // Sort select: newest / oldest / due date, working with the filters
+    // Sort select: newest / oldest / due date / priority, working with the filters
     // and live search above.
     document.getElementById('sort-select').addEventListener('change', e => {
       sortOrder = e.target.value;

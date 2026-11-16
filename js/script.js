@@ -207,6 +207,56 @@ const STORAGE_KEY = 'taskr_tasks';
       URL.revokeObjectURL(url);
     }
 
+    // --- Import tasks: reads a plain-text task file (one task per line,
+    // the same format the Export button produces) and adds the lines as
+    // new tasks. Header lines and blank lines are skipped; a leading
+    // "1. " number, "[x]"/"[ ]" status, trailing " (Priority)" and
+    // trailing " — Due 28 Oct" are parsed back into the task fields. ---
+    const IMPORT_MONTHS = { Jan: 0, Feb: 1, Mar: 2, Apr: 3, May: 4, Jun: 5, Jul: 6, Aug: 7, Sep: 8, Oct: 9, Nov: 10, Dec: 11 };
+
+    function parseImportedLine(line) {
+      let s = line.trim();
+      if (!s) return null;
+      if (s === 'TASKR — My Tasks' || s === 'No tasks yet.') return null;
+      s = s.replace(/^\d+\.\s*/, '');
+      let completed = false;
+      const status = s.match(/^\[(x| )\]\s*/i);
+      if (status) { completed = status[1].toLowerCase() === 'x'; s = s.slice(status[0].length); }
+      let dueDate = null;
+      const due = s.match(/\s*—\s*Due\s+(\d{1,2})\s+(Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)\s*$/i);
+      if (due) {
+        const monthName = due[2][0].toUpperCase() + due[2].slice(1).toLowerCase();
+        const d = new Date(new Date().getFullYear(), IMPORT_MONTHS[monthName], Number(due[1]));
+        if (!isNaN(d)) dueDate = d.toISOString().slice(0, 10);
+        s = s.slice(0, due.index).trim();
+      }
+      let priority = 'Medium';
+      const prio = s.match(/\s*\((Low|Medium|High)\)\s*$/i);
+      if (prio) { priority = prio[1][0].toUpperCase() + prio[1].slice(1).toLowerCase(); s = s.slice(0, prio.index).trim(); }
+      if (!s) return null;
+      return { text: s, priority, completed, dueDate };
+    }
+
+    function importTasksFromText(text) {
+      const parsed = text.split(/\r?\n/).map(parseImportedLine).filter(Boolean);
+      let added = 0;
+      parsed.forEach(p => {
+        let newId = Date.now();
+        while (tasks.some(t => t.id === newId)) newId++;
+        tasks.unshift({
+          id: newId,
+          text: p.text,
+          priority: p.priority,
+          completed: p.completed,
+          createdAt: new Date().toLocaleDateString('en-GB', { day: '2-digit', month: 'short' }),
+          dueDate: p.dueDate
+        });
+        added++;
+      });
+      if (added > 0) { save(); render(); }
+      return added;
+    }
+
     // --- Get filtered tasks ---
     function filtered() {
       let list;
@@ -376,6 +426,28 @@ const STORAGE_KEY = 'taskr_tasks';
 
     // Export tasks as a plain-text download
     document.getElementById('export-btn').addEventListener('click', exportTasks);
+
+    // Import tasks from a plain-text file (same format as Export):
+    // the button opens the file picker; the chosen file is read and
+    // its lines are added as new tasks, with a short count feedback.
+    document.getElementById('import-btn').addEventListener('click', () => {
+      document.getElementById('import-input').click();
+    });
+    document.getElementById('import-input').addEventListener('change', e => {
+      const file = e.target.files && e.target.files[0];
+      if (!file) return;
+      const reader = new FileReader();
+      reader.onload = () => {
+        const count = importTasksFromText(String(reader.result || ''));
+        const btn = document.getElementById('import-btn');
+        if (btn) {
+          btn.textContent = count === 0 ? 'No tasks found in file' : `Imported ${count} task${count === 1 ? '' : 's'}`;
+          setTimeout(() => { btn.textContent = 'Import Tasks'; }, 2500);
+        }
+      };
+      reader.readAsText(file);
+      e.target.value = '';
+    });
 
     // Undo the most recent delete, while the toast is shown
     document.getElementById('undo-btn').addEventListener('click', undoDelete);

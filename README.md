@@ -30,6 +30,7 @@ https://taskkerproj.netlify.app/
 - Dark mode toggle (dark by default; switch to a light theme, choice saved in localStorage)
 - Search tasks: a live text search that works together with the All/Pending/Completed filters
 - Export tasks: an Export Tasks button downloads the current task list as a plain-text file
+- Import tasks: an Import Tasks button reads a plain-text task file (one task per line, the same format Export produces) and adds the lines as new tasks — numbered lines, [x]/[ ] status, priority and due date are parsed back, with a short "Imported N tasks" confirmation
 - Mark All Complete button in the bottom bar: marks every pending task complete (Clear Completed still works as before)
 
 ## Run Locally

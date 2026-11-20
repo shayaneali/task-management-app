@@ -266,7 +266,11 @@ const STORAGE_KEY = 'taskr_tasks';
       // Priority filter works together with the status filter above.
       if (activePriority !== 'all') list = list.filter(t => (t.priority || 'Medium') === activePriority);
       // Live text search works together with the status and priority filters above.
-      if (searchQuery) list = list.filter(t => t.text.toLowerCase().includes(searchQuery));
+      // It matches the task title, and also the task's priority text, so typing
+      // "high", "medium" or "low" shows only tasks of that priority.
+      if (searchQuery) list = list.filter(t =>
+        t.text.toLowerCase().includes(searchQuery) ||
+        (t.priority || 'Medium').toLowerCase().includes(searchQuery));
       // Tasks are stored newest-first, so oldest order is just the reverse;
       // filtering and searching happen first, so sorting works with both.
       // Due-date order: earliest due date first; tasks with no due date
@@ -412,7 +416,7 @@ const STORAGE_KEY = 'taskr_tasks';
       render();
     });
 
-    // Live search: filters tasks by text, together with the active filter
+    // Live search: filters tasks by title or priority text, together with the active filters
     document.getElementById('search-input').addEventListener('input', e => {
       searchQuery = e.target.value.trim().toLowerCase();
       render();

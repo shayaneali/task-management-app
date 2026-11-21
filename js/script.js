@@ -184,6 +184,17 @@ const STORAGE_KEY = 'taskr_tasks';
       render();
     }
 
+    // --- Delete all tasks: removes every task after a confirm prompt,
+    // so a stray click cannot wipe the list. Empty list is a no-op. ---
+    function deleteAllTasks() {
+      if (tasks.length === 0) return;
+      const label = tasks.length === 1 ? '1 task' : tasks.length + ' tasks';
+      if (!confirm('Delete all ' + label + '? This cannot be undone.')) return;
+      tasks = [];
+      save();
+      render();
+    }
+
     // --- Export tasks: downloads the current task list as a plain-text file ---
     function exportTasks() {
       const lines = ['TASKR — My Tasks', ''];
@@ -427,6 +438,9 @@ const STORAGE_KEY = 'taskr_tasks';
 
     // Clear completed
     document.getElementById('clear-btn').addEventListener('click', clearCompleted);
+
+    // Delete all tasks (with confirm prompt)
+    document.getElementById('delete-all-btn').addEventListener('click', deleteAllTasks);
 
     // Export tasks as a plain-text download
     document.getElementById('export-btn').addEventListener('click', exportTasks);

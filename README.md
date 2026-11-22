@@ -3,10 +3,10 @@
 An interactive task management web app for creating, filtering and organizing tasks in real time, with task counts and a clean, responsive interface.
 
 ## Live Demo
-https://taskkerproj.netlify.app/
+https://shayaneali.github.io/task-management-app/
 
 ## Screenshot
-![task-management-app screenshot](https://image.thum.io/get/width/1200/https://taskkerproj.netlify.app/)
+![task-management-app screenshot](https://image.thum.io/get/width/1200/https://shayaneali.github.io/task-management-app/)
 
 ## Tech Stack
 - HTML5

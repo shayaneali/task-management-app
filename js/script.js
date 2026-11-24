@@ -107,7 +107,7 @@ const STORAGE_KEY = 'taskr_tasks';
       input.addEventListener('blur', () => commit(true));
     }
 
-    // --- Delete task, with a short undo window ---
+    // --- Delete task: asks first, then offers a short undo window ---
     let lastDeleted = null; // { task, index } of the most recently deleted task
     let undoTimer = null;
 
@@ -140,6 +140,7 @@ const STORAGE_KEY = 'taskr_tasks';
     function deleteTask(id) {
       const index = tasks.findIndex(t => t.id === id);
       if (index === -1) return;
+      if (!confirm('Delete "' + tasks[index].text + '"?')) return;
       lastDeleted = { task: tasks[index], index };
       tasks = tasks.filter(t => t.id !== id);
       save();

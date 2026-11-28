@@ -380,6 +380,36 @@ const STORAGE_KEY = 'taskr_tasks';
       if (dup)   duplicateTask(Number(dup.dataset.id));
     });
 
+    // --- Quick due-date buttons: Today / Tomorrow ---
+    // Format a Date as a local 'YYYY-MM-DD' string for the date input.
+    function toLocalDateString(date) {
+      const y = date.getFullYear();
+      const m = String(date.getMonth() + 1).padStart(2, '0');
+      const d = String(date.getDate()).padStart(2, '0');
+      return y + '-' + m + '-' + d;
+    }
+    // Highlight the quick button whose date matches the current due value.
+    function syncDueQuickButtons() {
+      const due = document.getElementById('task-due');
+      if (!due) return;
+      const today = toLocalDateString(new Date());
+      const tomorrow = toLocalDateString(new Date(Date.now() + 86400000));
+      document.querySelectorAll('.due-quick-btn').forEach(btn => {
+        const target = Number(btn.dataset.days) === 0 ? today : tomorrow;
+        btn.classList.toggle('active', due.value === target);
+      });
+    }
+    document.querySelectorAll('.due-quick-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const due = document.getElementById('task-due');
+        const days = Number(btn.dataset.days) || 0;
+        due.value = toLocalDateString(new Date(Date.now() + days * 86400000));
+        syncDueQuickButtons();
+        document.getElementById('task-input').focus();
+      });
+    });
+    document.getElementById('task-due').addEventListener('change', syncDueQuickButtons);
+
     // Add button
     document.getElementById('add-btn').addEventListener('click', () => {
       const inp = document.getElementById('task-input');
@@ -387,6 +417,7 @@ const STORAGE_KEY = 'taskr_tasks';
       addTask(inp.value, due.value, document.getElementById('priority-select').value);
       inp.value = '';
       due.value = '';
+      syncDueQuickButtons();
       inp.focus();
     });
 
@@ -397,6 +428,7 @@ const STORAGE_KEY = 'taskr_tasks';
         addTask(e.target.value, due.value, document.getElementById('priority-select').value);
         e.target.value = '';
         due.value = '';
+        syncDueQuickButtons();
       }
     });
 

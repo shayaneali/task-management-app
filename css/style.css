@@ -212,6 +212,22 @@
       box-shadow: 0 0 0 2px rgba(200,245,66,0.08);
     }
 
+    /* Quick due-date buttons (Today / Tomorrow) next to the date field */
+    .due-quick-btn {
+      background: transparent;
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      color: var(--text);
+      font-family: var(--font-body);
+      font-size: 12px;
+      padding: 6px 10px;
+      cursor: pointer;
+      white-space: nowrap;
+      transition: border-color 0.15s, color 0.15s;
+    }
+    .due-quick-btn:hover { border-color: var(--accent); color: var(--accent); }
+    .due-quick-btn.active { background: var(--accent); color: #0e0e0e; border-color: var(--accent); }
+
     .task-due {
       font-size: 10px;
       color: var(--accent);
